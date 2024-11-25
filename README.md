@@ -16,7 +16,7 @@ This project includes:
 7. Realtime messaging using Socket.io
 
 
-## Live Demo [here](https://hawky.vercel.app)
+## Live Demo [here](https://Hawky.vercel.app)
 
 ## Contribution Prerequisites
 

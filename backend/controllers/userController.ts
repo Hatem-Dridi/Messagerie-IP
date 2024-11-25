@@ -24,11 +24,15 @@ export async function Login(req: Request, res: Response) {
     const { email, password, userName } = req.body;
 
     try {
+        console.log(email, password, userName)
         const user = await User.login(email, password, userName);
+        console.log(user)
         const token = createToken(user._id);
-
+        console.log(token)
         res.status(200).json({ id: user._id, displayPicture: user.displayPicture, token, email, password, userName })
     } catch (error) {
+        console.log(email, password, userName)
+        console.log(error)
         res.status(400).json({error: (error as Error).message});
     }
 }

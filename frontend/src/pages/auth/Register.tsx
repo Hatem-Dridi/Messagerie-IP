@@ -46,7 +46,7 @@ function Register() {
         e.preventDefault();
         setLoading(true);
         
-        const res = await fetch(`https://hawky.onrender.com/api/user/signup`, {
+        const res = await fetch(`http://localhost:9000/api/user/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,4 +1,5 @@
 "use strict";
+const crypto = require('crypto');
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -78,7 +79,9 @@ userSchema.statics.signup = function (email, password, userName, displayPicture)
         if (password.length < 6) {
             throw new Error("Password must be greater than six characters");
         }
-        const user = yield this.create({ email, password, userName, displayPicture });
+        const hashedPassword = yield crypto.createHash('sha256').update(password).digest('hex');
+
+        const user = yield this.create({ email, password:hashedPassword, userName, displayPicture });
         return user;
     });
 };
@@ -91,7 +94,10 @@ userSchema.statics.login = function (email, password, userName) {
         if (!user) {
             throw new Error("Incorrect email or username");
         }
-        if (password !== user.password) {
+
+        const hashedPassword = yield crypto.createHash('sha256').update(password).digest('hex');
+
+        if (hashedPassword !== user.password) {
             throw new Error("Password is incorrect");
         }
         return user;

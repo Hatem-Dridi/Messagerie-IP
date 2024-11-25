@@ -1,4 +1,5 @@
 import mongoose, { Model, Schema } from "mongoose";
+const crypto = require('crypto');
 
 interface UserProps {
     email: string;
@@ -50,11 +51,14 @@ userSchema.statics.signup = async function (email: string, password: string, use
         throw new Error("Username is already in use");
     }
 
+    const hashedPassword = await crypto.createHash('sha256').update(password).digest('hex');
+
+
+
     if (password.length < 6) {
         throw new Error("Password must be greater than six characters");
     }
-
-    const user = await this.create({email, password, userName, displayPicture});
+    const user = await this.create({email, password: hashedPassword, userName, displayPicture});
     
     return user;
 }
@@ -69,6 +73,9 @@ userSchema.statics.login = async function (email: string, password: string, user
     if (!user) {
         throw new Error("Incorrect email or username");
     }
+
+    const hashedPassword = await crypto.createHash('sha256').update(password).digest('hex');
+    password = hashedPassword;
 
     if (password !== user.password) {
         throw new Error("Password is incorrect");
